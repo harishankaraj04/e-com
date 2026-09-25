@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Cart — PyShop{% endblock %}
+{% block content %}
+<h1>Your cart</h1>
+{% if items %}
+<table class="cart-table">
+  <thead>
+    <tr>
+      <th>Product</th>
+      <th>Qty</th>
+      <th>Total</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+      <tr>
+        <td class="prod">
+          <img src="{{ url_for('static', filename='images/' + item.product.image) }}" alt="" />
+          <div>
+            <a href="{{ url_for('product_detail', product_id=item.product.id) }}">{{ item.product.name }}</a>
+            <p>${{ "%.2f"|format(item.product.price) }}</p>
+          </div>
+        </td>
+        <td>
+          <form action="{{ url_for('update_cart', product_id=item.product.id) }}" method="post">
+            <input type="number" name="qty" min="0" max="10" value="{{ item.qty }}" />
+            <button type="submit">Update</button>
+          </form>
+        </td>
+        <td>${{ "%.2f"|format(item.line_total) }}</td>
+        <td>
+          <form action="{{ url_for('remove_from_cart', product_id=item.product.id) }}" method="post">
+            <button class="linkish" type="submit">Remove</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<p class="grand">Subtotal: ${{ "%.2f"|format(total) }}</p>
+<p><a class="btn" href="{{ url_for('checkout') }}">Checkout</a></p>
+{% else %}
+<p class="empty">Your cart is empty. <a href="{{ url_for('index') }}">Continue shopping</a>.</p>
+{% endif %}
+{% endblock %}

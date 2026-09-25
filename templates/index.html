@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}PyShop — Home{% endblock %}
+{% block content %}
+<section class="hero">
+  <div>
+    <p class="eyebrow">Everyday essentials</p>
+    <h1>Shop tech, home, and style in one place.</h1>
+    <p>Browse the catalog, add items to your cart, and try a demo checkout.</p>
+  </div>
+  <img src="{{ url_for('static', filename='images/hero.png') }}" alt="Featured products on a table" />
+</section>
+
+<nav class="filters">
+  <a class="{% if not active_category %}on{% endif %}" href="{{ url_for('index', q=query) }}">All</a>
+  {% for cat in categories %}
+    <a class="{% if active_category == cat %}on{% endif %}" href="{{ url_for('index', q=query, category=cat) }}">{{ cat }}</a>
+  {% endfor %}
+</nav>
+
+{% if products %}
+<section class="grid">
+  {% for product in products %}
+    <article class="card">
+      <a href="{{ url_for('product_detail', product_id=product.id) }}">
+        <img src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}" />
+        <h2>{{ product.name }}</h2>
+      </a>
+      <p class="meta">{{ product.category }}</p>
+      <p class="price">${{ "%.2f"|format(product.price) }}</p>
+      <form action="{{ url_for('add_to_cart', product_id=product.id) }}" method="post">
+        <button type="submit">Add to cart</button>
+      </form>
+    </article>
+  {% endfor %}
+</section>
+{% else %}
+<p class="empty">No products match your search.</p>
+{% endif %}
+{% endblock %}

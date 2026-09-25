@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}Order placed — PyShop{% endblock %}
+{% block content %}
+<section class="success">
+  <h1>Thanks, {{ name }}.</h1>
+  <p>Your demo order for ${{ "%.2f"|format(total) }} was placed. Nothing was charged.</p>
+  <a class="btn" href="{{ url_for('index') }}">Back to shop</a>
+</section>
+{% endblock %}

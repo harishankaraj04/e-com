@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Checkout — PyShop{% endblock %}
+{% block content %}
+<h1>Checkout</h1>
+<p class="grand">Order total: ${{ "%.2f"|format(total) }}</p>
+<form class="checkout" method="post">
+  <label>Full name
+    <input name="name" required />
+  </label>
+  <label>Email
+    <input type="email" name="email" required />
+  </label>
+  <label>Shipping address
+    <textarea name="address" rows="3" required></textarea>
+  </label>
+  <p class="hint">This is a demo. No payment is collected.</p>
+  <button type="submit">Place order</button>
+</form>
+{% endblock %}

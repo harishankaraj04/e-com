@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}PyShop{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="logo" href="{{ url_for('index') }}">PyShop</a>
+    <form class="search" action="{{ url_for('index') }}" method="get">
+      <input type="search" name="q" placeholder="Search products" value="{{ query|default('') }}" />
+      <button type="submit">Search</button>
+    </form>
+    <a class="cart-link" href="{{ url_for('cart') }}">Cart ({{ cart_count }})</a>
+  </header>
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="flash-wrap">
+        {% for message in messages %}
+          <p class="flash">{{ message }}</p>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <p>PyShop — a sample Python e-commerce store. Demo checkout only.</p>
+  </footer>
+</body>
+</html>
