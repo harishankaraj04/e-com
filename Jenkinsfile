@@ -5,32 +5,47 @@ pipeline {
 
         stage('Checkout') {
             steps {
-                echo 'Checking out e-commerce project'
+                git branch: 'cursor/flask-ecommerce-storefront',
+                    credentialsId: 'github-credentials',
+                    url: 'https://github.com/harishankaraj04/e-com.git'
             }
         }
 
-        stage('Build') {
+        stage('Python Setup') {
             steps {
-                echo 'Building application'
+                sh '''
+                    python3 --version
+                    python3 -m venv venv
+                    ./venv/bin/pip install --upgrade pip
+                '''
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    ./venv/bin/pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Test') {
             steps {
-                echo 'Running tests'
+                sh '''
+                    ./venv/bin/python -m py_compile app.py
+                    echo "Python syntax test passed"
+                '''
             }
         }
+    }
 
-        stage('Docker') {
-            steps {
-                echo 'Docker stage'
-            }
+    post {
+        success {
+            echo 'CI Pipeline completed successfully!'
         }
 
-        stage('Deploy') {
-            steps {
-                echo 'Deploying application'
-            }
+        failure {
+            echo 'CI Pipeline failed!'
         }
     }
 }
